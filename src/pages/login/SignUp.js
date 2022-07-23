@@ -6,6 +6,7 @@ import { useCreateUserWithEmailAndPassword, useSignInWithGoogle, useUpdateProfil
 import google from '../../Assets/icons/Group 573.png'
 import logo from '../../Assets/logo.webp'
 import auth from '../../Firebase.init';
+import useToken from '../../Components/Hooks/useToken';
 
 const SignUp = () => {
     const [showpass, setShowpass] = useState(false);
@@ -21,6 +22,9 @@ const SignUp = () => {
       ] = useCreateUserWithEmailAndPassword(auth);
 
     const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
+
+
+    const [token] = useToken(user || gUser)
 
       const onSubmit = data => {
 

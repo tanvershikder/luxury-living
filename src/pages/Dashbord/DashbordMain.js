@@ -16,13 +16,13 @@ const DashbordMain = () => {
                 <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
                 <div class="drawer-content">
                     {/* <!-- Page content here --> */}
-                    <Outlet></Outlet>
+                    <Outlet class='bg-base-300'></Outlet>
                 </div>
                 <div class="drawer-side">
-                    <label for="my-drawer-2" class="drawer-overlay"></label>
+                    <label htmlfor="my-drawer-2" class="drawer-overlay"></label>
                     <ul class="menu p-4 overflow-y-auto w-80 bg-base-100 text-base-content">
                         {/* <!-- Sidebar content here --> */}
-                        <li><Link to='/dashbord'><img src={card} alt="" className='h-5 text-headercolor'/> Book</Link></li>
+                        <li><Link to='booking'><img src={card} alt="" className='h-5 text-headercolor'/> Book</Link></li>
                         <li><Link to='bookinglist'><img src={booking} alt="" className='h-5 text-headercolor'/> Booking List</Link></li>
                         <li><Link to='review'><img src={review} alt="" className='h-5 text-headercolor'/> Review</Link></li>
                         <li><Link to='orderlist'><HiOutlineShoppingBag /  >Order List</Link></li>

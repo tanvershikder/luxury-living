@@ -14,6 +14,10 @@ import MakeAdmin from './Components/Dashbord/MakeAdmin';
 import ManageService from './Components/Dashbord/ManageService';
 import AddService from './Components/Dashbord/AddService';
 import OrderList from './Components/Dashbord/OrderList';
+import RequireAuth from './pages/login/RequireAuth';
+import Notfound from './pages/Notfound/Notfound';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
@@ -24,17 +28,28 @@ function App() {
         <Route path='/home' element={<Home></Home>}></Route>
         <Route path='/login' element={<Login></Login>}></Route>
         <Route path='/signup' element={<SignUp></SignUp>}></Route>
-        <Route path='/dashbord' element={<DashbordMain></DashbordMain>}>
-          <Route index element={<Book></Book>}></Route>
+        <Route path='/dashbord' element={
+          <RequireAuth>
+            <DashbordMain></DashbordMain>
+          </RequireAuth>
+        }>
+          <Route index element={<BookinList></BookinList>}></Route>
           <Route path='bookinglist' element={<BookinList></BookinList>}></Route>
+          <Route path='booking' element={<Book></Book>}></Route>
+          <Route path='booking/:id' element={<Book></Book>}></Route>
           <Route path='review' element={<Review></Review>}></Route>
           <Route path='makeadmin' element={<MakeAdmin></MakeAdmin>}></Route>
           <Route path='manageservice' element={<ManageService></ManageService>}></Route>
           <Route path='addservice' element={<AddService></AddService>}></Route>
           <Route path='orderlist' element={<OrderList></OrderList>}></Route>
+
+
         </Route>
+        <Route path='*' element={<Notfound></Notfound>}></Route>
       </Routes>
       <Footer></Footer>
+
+      <ToastContainer />
     </div>
   );
 }

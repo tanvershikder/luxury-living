@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuthState, useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import google from '../../Assets/icons/Group 573.png'
 import logo from '../../Assets/logo.webp'
+import useToken from '../../Components/Hooks/useToken';
 import auth from '../../Firebase.init';
 
 const Login = () => {
@@ -12,15 +13,30 @@ const Login = () => {
     const [showpass, setShowpass] = useState(false);
     const { register, formState: { errors }, handleSubmit, getValues } = useForm();
     const navigate = useNavigate()
+    let location = useLocation();
 
     const [
         signInWithEmailAndPassword,
-        eUser,
+        User,
         loading,
         error,
       ] = useSignInWithEmailAndPassword(auth);
 
     const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
+
+
+    const [token] = useToken(User || gUser);
+
+    let from = location.state?.from?.pathname || "/";
+
+    useEffect(()=>{
+        if (User || gUser) {
+            navigate(from, { replace: true });
+        }
+        // if (token) {
+        //     navigate(from, { replace: true });
+        // }
+    },[token, from, navigate])
 
     const onSubmit = data => {
         signInWithEmailAndPassword(data.email,data.password)
@@ -31,7 +47,8 @@ const Login = () => {
 
     }
     if(user){
-        navigate('/')
+        // navigate('/')
+        console.log(user);
     }
 
     return (
