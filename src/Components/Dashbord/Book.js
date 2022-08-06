@@ -7,34 +7,44 @@ import paypal from '../../Assets/icons/image 17.png'
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useState } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+import ChackOutForm from './ChackOutForm';
+
+const stripePromise = loadStripe('pk_test_51L0VYqIjoDmdgvDrUO0C5ZUrgLT9Zdi3bmtGi5P95AABblBLQEXmfm5ME6oo9BAe3n8mpbP4pdQEFYjWaYtPF7sV00p5YqAipF');
 
 const Book = () => {
 
     const [user] = useAuthState(auth)
-    console.log(user.email);
+    // console.log(user.email);
     const { id } = useParams()
-    console.log(id)
+    // console.log(id)
+    const [userName,setUserName] = useState()
 
     const [serviecDetails, setServicedetails] = useState({})
 
     useEffect(() => {
 
-        fetch(`http://localhost:5000/service/${id}`)
-            .then(res => res.json())
-            .then(data => setServicedetails(data))
-    }, [id])
+        if (id) {
+            fetch(`http://localhost:5000/service/${id}`)
+                .then(res => res.json())
+                .then(data => setServicedetails(data))
+        }
+    }, [])
 
     if (serviecDetails) {
-        console.log(serviecDetails.service);
+        // console.log(serviecDetails);
     }
 
+   
+   
 
     return (
         <div>
             <div className='m-10'>
-                <input type="text" placeholder='Enter Your Name' className='block mb-3 h-10 w-96 bg-blue-200 rounded' />
+                <input type="text" onChange={(e) => setUserName(e.target.value)} placeholder='Enter Your Name' className='block mb-3 h-10 w-96 bg-blue-200 rounded' />
                 <input type="email" value={user.email} className='block mb-3 h-10 w-96 bg-blue-200 rounded' />
-                <input type="text" value={serviecDetails?.service} className='block mb-3 h-10 w-96 bg-blue-200 rounded' />
+                <input type="text" value={id ? serviecDetails?.service : "Please select any service"} className='block mb-3 h-10 w-96 bg-blue-200 rounded' />
             </div>
             <div className='m-10'>
                 <p className='mb-4'>pay with</p>
@@ -52,15 +62,9 @@ const Book = () => {
                 </div>
             </div>
             <div>
-                <div className="mx-10">
-                    <input type="text" placeholder='Enter Card Number' className='block mb-3 h-10 w-96 bg-blue-200 rounded placeholder:p-5' />
-                </div>
-                <div className='w-[383px] ml-10'>
-                    <div className='flex justify-between'>
-                        <input type="text" placeholder='Enter Month' className='block mb-3 h-10 w-[190px] bg-blue-200 rounded placeholder:p-5' />
-                        <input type="text" placeholder='Enter Year' className='block mb-3 h-10 w-[190px] bg-blue-200 rounded placeholder:p-5' />
-                    </div>
-                </div>
+                <Elements stripe={stripePromise}>
+                    <ChackOutForm serviecDetails = {serviecDetails} userName={userName}></ChackOutForm>
+                </Elements>
             </div>
         </div>
     );
